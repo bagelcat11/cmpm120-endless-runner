@@ -10,8 +10,9 @@ class Play extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
 
         // when we add the player, it will add its FSM to this scene
-        this.player = new Player(this, w / 2, h / 2, "red-cube");
-        this.player.setScale(0.25);
+        this.player = new Player(this, w / 2, h / 2, "alien");
+        // this.player.setScale(2);
+        this.player.anims.play("run");
         // this.player.body.setSize(0.5);
 
         // instructions

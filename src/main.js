@@ -16,7 +16,7 @@ const config = {
             // gravity: {x: 0, y: 0},
         }
     },
-    scene: [ Load, Play ],
+    scene: [ Load, Menu, Play ],
     // pipeline: { InvertFX }
 }
 

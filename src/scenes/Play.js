@@ -34,7 +34,7 @@ class Play extends Phaser.Scene {
 
         // set up initial chunk and group for chunks
         this.chunkGroup = this.add.group({
-            runChildUpdate: true
+            runChildUpdate: true    // otherwise, call their update in this update
         });
         this.addChunk();
 
@@ -45,9 +45,6 @@ class Play extends Phaser.Scene {
 
     update() {
         this.playerGravFSM.step();
-        if (this.chunk) {
-            this.chunk.update();    // HAVE TO CALL FROM ACTIVE SCENE
-        }
         this.debugText.setText([
             "Pos: " + this.player.body.x + ", " + this.player.body.y,
             "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y

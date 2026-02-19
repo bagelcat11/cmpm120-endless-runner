@@ -31,7 +31,7 @@ class Load extends Phaser.Scene {
             });
         }
 
-        // enter play once load is done
-        this.scene.start("playScene");
+        // enter menu once load is done
+        this.scene.start("menuScene");
     }
 }

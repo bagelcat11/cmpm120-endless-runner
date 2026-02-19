@@ -1,12 +1,13 @@
 // make it extend generic gameobject so we can catch its destroy, etc
 class TerrainChunk extends Phaser.GameObjects.GameObject {
     // get extra timePassed arg to determine difficulty, and player arg
-    constructor(scene, player, timePassed) {
+    constructor(scene, player, timeElapsed) {
+        console.log("made chunk at time " + timeElapsed);
         super(scene, "map-json");
 
         this.scene = scene;
         this.player = player;
-        this.timePassed = timePassed;
+        this.timeElapsed = timeElapsed;
 
         const map = scene.add.tilemap("map-json");
         this.mapW = map.widthInPixels;
@@ -26,15 +27,18 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
     }
 
     update() {
-        //TODO: make it do more if more time has passed
-        this.bottomTerrainLayer.x -= 5;
+        // make it faster if more time has passed
+        // take root so that speedup falls off over time
+        // add const since the first call will have timeElapsed be 0
+        this.bottomTerrainLayer.x -= Math.pow(this.scene.timeElapsed + 10, 0.5);
 
         if (this.bottomTerrainLayer.x < -this.mapW) {
-            console.log("DEAD!");
+            // console.log("DEAD!");
             this.destroy();
         }
 
-        if (!this.batoned && this.bottomTerrainLayer.x < - w / 2) {
+        //TODO: increase distance for batoned over time?
+        if (!this.batoned && this.bottomTerrainLayer.x < - w / 4) {
             // call adder from parent scene
             this.scene.addChunk(this.scene, this.player, this.timePassed);
             this.batoned = true;

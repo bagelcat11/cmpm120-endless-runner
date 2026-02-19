@@ -10,13 +10,10 @@ class Play extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
 
         // when we add the player, it will add its FSM to this scene
-        this.player = new Player(this, w / 2, h / 2, "alien");
-        // this.player.setScale(2);
+        this.player = new Player(this, w / 4, h * 0.9, "alien");
+        // this.player.setScale(0.5);
         this.player.anims.play("run");
         // this.player.body.setSize(0.5);
-
-        // instructions
-        document.getElementById("info").innerText = "use SPACE to switch gravity";
 
         // set up inversion shader
         // https://rexrainbow.github.io/phaser3-rex-notes/docs/site/postfx-pipeline/
@@ -32,6 +29,10 @@ class Play extends Phaser.Scene {
         // terrainLayer.setCollisionByProperty({collides: true});
         // this.physics.add.collider(this.player, terrainLayer);
 
+        // timer
+        this.timeElapsed = 0;
+        this.timerText = this.add.text(0, h - 64);
+
         // set up initial chunk and group for chunks
         this.chunkGroup = this.add.group({
             runChildUpdate: true    // otherwise, call their update in this update
@@ -43,16 +44,18 @@ class Play extends Phaser.Scene {
         this.debugText = this.add.text(0, h - 64);
     }
 
-    update() {
+    update(time, delta) {
         this.playerGravFSM.step();
-        this.debugText.setText([
-            "Pos: " + this.player.body.x + ", " + this.player.body.y,
-            "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
-        ]);
+        this.timeElapsed += delta / 1000;
+        this.timerText.text = this.timeElapsed.toFixed(1); // seconds to 1 decimal
+        // this.debugText.setText([
+        //     "Pos: " + this.player.body.x + ", " + this.player.body.y,
+        //     "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
+        // ]);
     }
 
     addChunk() {
-        let chunk = new TerrainChunk(this, this.player, 0);
+        let chunk = new TerrainChunk(this, this.player, this.timeElapsed);
         this.chunkGroup.add(chunk);
     }
 }

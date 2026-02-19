@@ -10,7 +10,7 @@ class Menu extends Phaser.Scene {
 
         let titleConfig = {
             fontFamily: "Courier",
-            fontSize: "28px",
+            fontSize: "16px",
             backgroundColor: "#AA00BB",
             color: "#FFFFFF",
             align: "center",
@@ -20,10 +20,10 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         };
-        this.add.text(w / 2, h * 0.35, "Space Cowglorp Escape or smth", titleConfig).setOrigin(0.5);
+        this.add.text(w / 2, h * 0.35, "smth title", titleConfig).setOrigin(0.5);
         let tipConfig = {
             fontFamily: "Courier",
-            fontSize: "20px",
+            fontSize: "12px",
             backgroundColor: "#AA00BB",
             color: "#FFFFFF",
             align: "center",
@@ -38,7 +38,7 @@ class Menu extends Phaser.Scene {
 
         let creditsConfig = {
             fontFamily: "Courier",
-            fontSize: "24px",
+            fontSize: "12px",
             backgroundColor: "#116622",
             color: "#FFFFFF",
             align: "center",

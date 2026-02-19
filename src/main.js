@@ -5,10 +5,10 @@
 const config = {
     parent: 'phaser-game',  // for info text
     type: Phaser.AUTO,
-    width: 640,
-    height: 480,
+    width: 512, // 16:9
+    height: 288,
     pixelArt: true,
-    // zoom: 2,    // basically scales up canvas
+    zoom: 2,    // basically scales up canvas
     physics: {
         default: "arcade",
         arcade: {

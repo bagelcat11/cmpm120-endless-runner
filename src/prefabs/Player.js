@@ -7,10 +7,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
 
         // make new properties
-        this.gravScale = 1000;
+        this.gravScale = 1500;
 
         // create FSM (initial state, state list, state args)
-        scene.playerGravFSM = new StateMachine("down", {
+        scene.playerGravFSM = new StateMachine("up", {
             down: new DownState(),
             up: new UpState(),
         }, [scene, this]);

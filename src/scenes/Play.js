@@ -30,7 +30,12 @@ class Play extends Phaser.Scene {
         // const terrainLayer = map.createLayer("terrain", tileset);
         // terrainLayer.setCollisionByProperty({collides: true});
         // this.physics.add.collider(this.player, terrainLayer);
-        this.chunk = new TerrainChunk(this, this.player, 0);
+
+        // set up initial chunk and group for chunks
+        this.chunkGroup = this.add.group({
+            runChildUpdate: true
+        });
+        this.addChunk();
 
         // debug stuff
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -39,10 +44,17 @@ class Play extends Phaser.Scene {
 
     update() {
         this.playerGravFSM.step();
-        this.chunk.update();    // HAVE TO CALL FROM ACTIVE SCENE
+        if (this.chunk) {
+            this.chunk.update();    // HAVE TO CALL FROM ACTIVE SCENE
+        }
         this.debugText.setText([
             "Pos: " + this.player.body.x + ", " + this.player.body.y,
             "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
         ]);
+    }
+
+    addChunk() {
+        let chunk = new TerrainChunk(this, this.player, 0);
+        this.chunkGroup.add(chunk);
     }
 }

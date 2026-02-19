@@ -22,13 +22,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 class DownState extends State {
     enter(scene, player) {
         player.setGravityY(player.gravScale);
-        // scene.physics.world.gravity.y *= -1;
         player.resetFlip();
-        // scene.cameras.main.removePostPipeline(InvertFX);
-        scene.cameras.main.postFX.colorMatrix.negative = true;
-        console.log("going down");
-        // console.log("velocity: " + player.body.velocity.y);
-        // console.log("position: " + player.x + ", " + player.y);
     }
 
     execute(scene, player) {
@@ -37,7 +31,7 @@ class DownState extends State {
         if (Phaser.Input.Keyboard.JustDown(space) &&
                 player.body.blocked.down) {
             this.stateMachine.transition("up");
-            return; 
+            return;
         }
     }
 }
@@ -45,12 +39,7 @@ class DownState extends State {
 class UpState extends State {
     enter(scene, player) {
         player.setGravityY(-player.gravScale);
-        // scene.physics.world.gravity.y *= -1;
         player.setFlipY(true);
-        // scene.cameras.main.setPostPipeline(InvertFX);
-        console.log("going up");
-        // console.log("velocity:" + player.body.velocity.y);
-        // console.log("position: " + player.x + ", " + player.y);
     }
 
     execute(scene, player) {

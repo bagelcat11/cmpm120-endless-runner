@@ -1,14 +1,13 @@
 // GRADING COMMENT
 
 'use strict'
-// import { InvertFX } from "../assets/shaders/invertFX";
 
 const config = {
     parent: 'phaser-game',  // for info text
     type: Phaser.AUTO,
-    width: 600,
-    height: 600,
-    // pixelArt: true,
+    width: 640,
+    height: 480,
+    pixelArt: true,
     // zoom: 2,    // basically scales up canvas
     physics: {
         default: "arcade",
@@ -18,7 +17,7 @@ const config = {
         }
     },
     scene: [ Load, Play ],
-    pipeline: { InvertFX }
+    // pipeline: { InvertFX }
 }
 
 const game = new Phaser.Game(config)

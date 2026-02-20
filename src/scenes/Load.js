@@ -14,6 +14,10 @@ class Load extends Phaser.Scene {
 
         this.load.image("tileset-image", "images/space-station-tiles.png");
         this.load.tilemapTiledJSON("map-json", "images/map.json");
+
+        this.load.image("floor-sprite", "images/floor.png");
+        this.load.image("big-cact-sprite", "images/big_cact.png");
+        this.load.image("small-cact-sprite", "images/small_cact.png");
     }
 
     create() {

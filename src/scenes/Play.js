@@ -14,6 +14,7 @@ class Play extends Phaser.Scene {
         // this.player.setScale(0.5);
         this.player.anims.play("run");
         // this.player.body.setSize(0.5);
+        this.gameOver = false;
 
         // set up inversion shader
         // https://rexrainbow.github.io/phaser3-rex-notes/docs/site/postfx-pipeline/
@@ -37,25 +38,39 @@ class Play extends Phaser.Scene {
         this.chunkGroup = this.add.group({
             runChildUpdate: true    // otherwise, call their update in this update
         });
+        this.cactiGroup = this.physics.add.group({
+            runChildUpdate: true
+        });
         this.addChunk();
 
         // debug stuff
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.debugText = this.add.text(0, h - 64);
+        this.debugText = this.add.text(0, h - 64).setDepth(101);
     }
 
     update(time, delta) {
-        this.playerGravFSM.step();
-        this.timeElapsed += delta / 1000;
-        this.timerText.text = this.timeElapsed.toFixed(1); // seconds to 1 decimal
-        // this.debugText.setText([
-        //     "Pos: " + this.player.body.x + ", " + this.player.body.y,
-        //     "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
-        // ]);
+        if (!this.gameOver) {
+            this.playerGravFSM.step();
+            this.timeElapsed += delta / 1000;
+            this.timerText.text = this.timeElapsed.toFixed(1); // seconds to 1 decimal
+            // this.debugText.setText([
+            //     "Pos: " + this.player.body.x + ", " + this.player.body.y,
+            //     "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
+            // ]);
+
+            this.physics.world.collide(this.player, this.cactiGroup, this.playerDie, null, this);
+        }
     }
 
     addChunk() {
         let chunk = new TerrainChunk(this, this.player, this.timeElapsed);
         this.chunkGroup.add(chunk);
+    }
+
+    playerDie() {
+        this.player.destroy();
+        this.gameOver = true;
+        let score = this.timeElapsed;
+        console.log("final score: " + score.toFixed(1));
     }
 }

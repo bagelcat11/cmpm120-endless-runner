@@ -52,6 +52,7 @@ class Menu extends Phaser.Scene {
             "",
             "Programming: Lynn Gen\n",
             "Art: Lynn Gen\n",
+            "Palette: Commodore 64",
             "",
             "(Press [↓] to hide)",
             "",

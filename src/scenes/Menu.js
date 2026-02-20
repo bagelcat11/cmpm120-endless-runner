@@ -7,7 +7,7 @@ class Menu extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
 
         //TODO: set background to starting frame of playScene
-
+        //      and change text colors to commodore64
         let titleConfig = {
             fontFamily: "Courier",
             fontSize: "16px",

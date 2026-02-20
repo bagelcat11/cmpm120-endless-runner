@@ -35,7 +35,7 @@ class Play extends Phaser.Scene {
         this.timerText = this.add.text(0, h - 64);
 
         // set up initial chunk and group for chunks
-        this.chunkGroup = this.add.group({
+        this.chunkGroup = this.physics.add.group({
             runChildUpdate: true    // otherwise, call their update in this update
         });
         this.cactiGroup = this.physics.add.group({
@@ -59,12 +59,26 @@ class Play extends Phaser.Scene {
             // ]);
 
             this.physics.world.collide(this.player, this.cactiGroup, this.playerDie, null, this);
+
+            //TODO: also figure out a way to remove the floors......
+            if (this.cactiGroup.getLength() > 20) {
+                // destroy earlier cacti and remove them from scene
+                this.cactiGroup.remove(this.cactiGroup.getFirstAlive(), true, true);
+            }
+            if (this.chunkGroup.getLength() > 5) {
+                this.chunkGroup.remove(this.chunkGroup.getFirstAlive(), true, true);
+            }
+
+        } else {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+                this.scene.start("menuScene");
+            }
         }
     }
 
     addChunk() {
         let chunk = new TerrainChunk(this, this.player, this.timeElapsed);
-        this.chunkGroup.add(chunk);
+        this.chunkGroup.add(chunk, {});
     }
 
     playerDie() {
@@ -72,5 +86,27 @@ class Play extends Phaser.Scene {
         this.gameOver = true;
         let score = this.timeElapsed;
         console.log("final score: " + score.toFixed(1));
+
+        let gameOverConfig = {
+            fontFamily: "Courier",
+            fontSize: "12px",
+            backgroundColor: "#116622",
+            color: "#FFFFFF",
+            align: "center",
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: w
+        };
+        let gameOverText = [
+            "",
+            "GAME OVER",
+            "",
+            "You survived for " + score.toFixed(1) + " sec.",
+            "Press [↓] to return to menu",
+            ""
+        ];
+        this.overText = this.add.text(w / 2, h / 2, gameOverText, gameOverConfig).setOrigin(0.5);
     }
 }

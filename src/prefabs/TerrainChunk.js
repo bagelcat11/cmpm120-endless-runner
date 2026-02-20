@@ -3,6 +3,8 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
     // get extra timePassed arg to determine difficulty, and player arg
     constructor(scene, player, timeElapsed) {
         // console.log("made chunk at time " + timeElapsed);
+        console.log("there are " + scene.cactiGroup.getLength() + " cacti")
+        console.log("there are " + scene.chunkGroup.getLength() + " chunks")
         super(scene, "map-json");
 
         this.scene = scene;
@@ -17,12 +19,14 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         // add image to map (name FROM TILED IN JSON, key)
         const tileset = map.addTilesetImage("space-station-tiles", "tileset-image");
 
+
         // get floor from map
         const bottomFloorObj = map.findObject("chunk", obj => obj.name === "floor");
         this.bottomFloor = scene.physics.add.sprite(bottomFloorObj.x, bottomFloorObj.y,
             "floor-sprite").setOrigin(0);
         this.bottomFloor.body.setImmovable();
         this.bottomFloor.body.setFrictionX(0);
+        scene.chunkGroup.add(this.bottomFloor);
 
         // special empty chunk for time 0
         if (timeElapsed < 1) {
@@ -41,8 +45,8 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
             });
             // remove random cacti; number of removals inversely proportional to time passed
             Phaser.Math.RND.shuffle(this.cacti);
+            //TODO: make this equation better
             let maxToRemove = Math.ceil(-Math.pow(this.scene.timeElapsed, 0.5) + 8);
-            // console.log("removing " + maxToRemove);
             for (let i = 0; i < Phaser.Math.Between(maxToRemove - 2, maxToRemove); i++) {
                 let c = this.cacti.pop();
                 c.destroy();
@@ -99,10 +103,10 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         // add const since the first call will have timeElapsed be 0
         if (!this.scene.gameOver) {
             let v = -Math.pow(this.scene.timeElapsed + 1000, 0.75)
-            this.bottomFloor.setVelocityX(v);
+            this.scene.chunkGroup.setVelocityX(v);
             this.scene.cactiGroup.setVelocityX(v);
         } else {
-            this.bottomFloor.setVelocityX(0);
+            this.scene.chunkGroup.setVelocityX(0);
             this.scene.cactiGroup.setVelocityX(0);
         }
 

@@ -4,13 +4,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);   // add Player to scene
         scene.physics.add.existing(this);   // add Player body to scene
 
-        this.body.setCollideWorldBounds(true);
+        this.scene = scene;
+        this.body.setCollideWorldBounds(false);
         this.body.setSize(this.width / 2, this.height).setOffset(this.width / 4, 0);
         
         this.setDepth(99);
 
         // make new properties
-        this.gravScale = 1500;
+        this.gravScale = 2000;
 
         // create FSM (initial state, state list, state args)
         scene.playerGravFSM = new StateMachine("up", {
@@ -19,6 +20,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }, [scene, this]);
     }
 
+    update() {
+        if (this.x < -this.width / 2 ||
+                this.y > h + this.height / 2 ||
+                this.y < -this.height / 2) {
+            this.scene.playerDie();
+            console.log("ouw")
+        }
+    }
 }
 
 // player state classes

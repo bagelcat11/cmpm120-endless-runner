@@ -18,6 +18,8 @@ class Load extends Phaser.Scene {
         this.load.image("floor-sprite", "images/floor.png");
         this.load.image("big-cact-sprite", "images/big_cact.png");
         this.load.image("small-cact-sprite", "images/small_cact.png");
+
+        this.load.image("particle-sprite", "images/particle.png");
     }
 
     create() {

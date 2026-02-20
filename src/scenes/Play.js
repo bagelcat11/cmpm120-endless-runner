@@ -35,13 +35,27 @@ class Play extends Phaser.Scene {
         this.timerText = this.add.text(0, h - 64);
 
         // set up initial chunk and group for chunks
-        this.chunkGroup = this.physics.add.group({
+        this.chunkGroup = this.add.group({
             runChildUpdate: true    // otherwise, call their update in this update
         });
         this.cactiGroup = this.physics.add.group({
             runChildUpdate: true
         });
         this.addChunk();
+
+        // death particles
+        this.particlesConfig = {
+            scale: {start: 4, end: 0},
+            speed: {min: -500, max: 500},
+            angle: {min: 0, max: 360},
+            tint: {start: 0xFF0000, end: 0x0000FF},
+            blendMode: 'SCREEN',
+            count: 40,
+            frequency: 5,
+            lifespan: 1000,
+            gravityY: this.player.body.gravity.y / 4,
+            duration: 100,
+        };
 
         // debug stuff
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -51,6 +65,7 @@ class Play extends Phaser.Scene {
     update(time, delta) {
         if (!this.gameOver) {
             this.playerGravFSM.step();
+            this.player.update();
             this.timeElapsed += delta / 1000;
             this.timerText.text = this.timeElapsed.toFixed(1); // seconds to 1 decimal
             // this.debugText.setText([
@@ -65,9 +80,9 @@ class Play extends Phaser.Scene {
                 // destroy earlier cacti and remove them from scene
                 this.cactiGroup.remove(this.cactiGroup.getFirstAlive(), true, true);
             }
-            if (this.chunkGroup.getLength() > 5) {
-                this.chunkGroup.remove(this.chunkGroup.getFirstAlive(), true, true);
-            }
+            // if (this.chunkGroup.getLength() > 5) {
+            //     this.chunkGroup.remove(this.chunkGroup.getFirstAlive(), true, true);
+            // }
 
         } else {
             if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
@@ -78,14 +93,21 @@ class Play extends Phaser.Scene {
 
     addChunk() {
         let chunk = new TerrainChunk(this, this.player, this.timeElapsed);
-        this.chunkGroup.add(chunk, {});
+        this.chunkGroup.add(chunk);
     }
 
     playerDie() {
         this.player.destroy();
         this.gameOver = true;
         let score = this.timeElapsed;
-        console.log("final score: " + score.toFixed(1));
+        // console.log("final score: " + score.toFixed(1));
+        let particles = this.add.particles(
+            this.player.x + this.player.width / 2,
+            this.player.y + this.player.height / 2,
+            "particle-sprite",
+            this.particlesConfig
+        );
+        particles.start();
 
         let gameOverConfig = {
             fontFamily: "Courier",
@@ -107,6 +129,10 @@ class Play extends Phaser.Scene {
             "Press [↓] to return to menu",
             ""
         ];
-        this.overText = this.add.text(w / 2, h / 2, gameOverText, gameOverConfig).setOrigin(0.5);
+
+        particles.on("complete", () => {
+            particles.destroy;
+            this.overText = this.add.text(w / 2, h / 2, gameOverText, gameOverConfig).setOrigin(0.5);
+        });
     }
 }

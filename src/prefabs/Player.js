@@ -45,14 +45,6 @@ class DownState extends State {
         const {left, right, up, down, space, shift } = scene.keys;
 
         if (player.body.blocked.down) {
-            // player.walkSound.once("complete", () => {
-            //     player.walkSound.play();
-            // });
-            // if (!player.walkSound.isPlaying) {
-            //     scene.time.delayedCall(1000, () => {
-            //         player.walkSound.play();
-            //     }, null, this);
-            // }
             if (Phaser.Input.Keyboard.JustDown(space)) {
                 player.scene.sound.play("jump-sfx");
                 this.stateMachine.transition("up");

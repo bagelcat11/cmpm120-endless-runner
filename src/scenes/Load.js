@@ -4,7 +4,6 @@ class Load extends Phaser.Scene {
     }
 
     preload() {
-        //TODO: put up loading graphic
         this.add.text(w / 2, h / 2, "Loading . . .");
 
         // put all assets in cache

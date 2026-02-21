@@ -52,15 +52,13 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
             });
             // remove random cacti; number of removals inversely proportional to time passed
             Phaser.Math.RND.shuffle(this.cacti);
-            //TODO: make cacti equation better
             // I invented all these equations by looking at them in desmos and seeing if
             // I liked how they curved
-            let maxToRemove = Math.ceil(-Math.pow(this.scene.timeElapsed, 0.25) + 6);
+            let maxToRemove = Math.ceil(-Math.pow(this.scene.timeElapsed, 0.18) + 7);
             for (let i = 0; i < Phaser.Math.Between(maxToRemove - 1, maxToRemove); i++) {
                 let c = this.cacti.pop();
                 c.destroy();
             }
-            // console.log('now ' + this.cacti.length + " cacti")
             // nathan's manual physics thing
             scene.physics.world.enable(this.cacti, Phaser.Physics.Arcade.DYNAMIC_BODY);
             // add to group sooner rather than later, because doing that MAY RESET PROPERTIES
@@ -77,7 +75,7 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
                 }
                 // randomly split between floor and ceil
                 if (Phaser.Math.Between(0, 1) == 0) {
-                    c.setOrigin(1);
+                    c.setOrigin(0, 1);
                     c.setY(this.bottomFloor.y);
                 } else {
                     c.setOrigin(0);
@@ -99,9 +97,8 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         // take root so that speedup falls off over time
         // add const since the first call will have timeElapsed be 0
         if (!this.scene.gameOver) {
-            //TODO: make speedup better
             // ----- The Great Game Speedup Equation ----- //
-            let v = -Math.pow(this.scene.timeElapsed + 380, 0.9)
+            let v = -Math.pow(this.scene.timeElapsed + 280, 0.95);
             this.bottomFloor.setVelocityX(v);
             this.topFloor.setVelocityX(v);
             this.scene.cactiGroup.setVelocityX(v);
@@ -112,7 +109,6 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         }
 
         if (this.bottomFloor.x < -this.mapW) {
-            //TODO: figure out how to destroy floors i added to scene...
             this.destroy();
         }
 

@@ -4,9 +4,6 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // global gravity
-        // this.physics.world.gravity.y = 1000;
-        
         this.keys = this.input.keyboard.createCursorKeys();
 
         // parallax!!!

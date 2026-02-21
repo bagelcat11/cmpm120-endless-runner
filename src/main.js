@@ -12,12 +12,11 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: true,
+            // debug: true,
             // gravity: {x: 0, y: 0},
         }
     },
     scene: [ Load, Menu, Play ],
-    // pipeline: { InvertFX }
 }
 
 const game = new Phaser.Game(config);
@@ -25,4 +24,6 @@ const game = new Phaser.Game(config);
 // globals
 let w = game.config.width, h = game.config.height;
 let bgmTimestamp = 0;
-let bgmVol = 0.4;
+let bgmVol = 0.3;
+let commodoreGreen = 0x55a049;
+let commodorePurple = 0x40318d;

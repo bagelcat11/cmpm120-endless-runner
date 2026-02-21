@@ -5,66 +5,32 @@ class Menu extends Phaser.Scene {
 
     create() {
         this.keys = this.input.keyboard.createCursorKeys();
+        this.keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
 
-        //TODO: set background to starting frame of playScene
-        //      and change text colors to commodore64
-        let titleConfig = {
-            fontFamily: "Courier",
-            fontSize: "16px",
-            backgroundColor: "#AA00BB",
-            color: "#FFFFFF",
-            align: "center",
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: 0
-        };
-        this.add.text(w / 2, h * 0.35, "smth title", titleConfig).setOrigin(0.5);
-        let tipConfig = {
-            fontFamily: "Courier",
-            fontSize: "12px",
-            backgroundColor: "#AA00BB",
-            color: "#FFFFFF",
-            align: "center",
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: 0
-        };
-        this.add.text(w / 2, h * 0.5, "Press [SPACE] to change gravity", tipConfig).setOrigin(0.5);
-        this.add.text(w / 2, h * 0.65, "Press [↓] for credits", tipConfig).setOrigin(0.5);
+        this.menuBg = this.add.image(0, 0, "menu-bg").setOrigin(0);
 
-        let creditsConfig = {
-            fontFamily: "Courier",
-            fontSize: "12px",
-            backgroundColor: "#116622",
-            color: "#FFFFFF",
-            align: "left",
-            padding: {
-                top: 5,
-                bottom: 5,
-                left: w / 4
-            },
-            fixedWidth: w
-        };
+        this.add.bitmapText(w / 2, h * 0.33, "c64-font", "Zworp's Space Escape", 20).setOrigin(0.5);
+        this.add.bitmapText(w / 2, h * 0.5, "c64-font", "Press [SPACE] to change gravity", 12).setOrigin(0.5);
+        this.add.bitmapText(w / 2, h * 0.65, "c64-font", "Press [C] for credits", 12).setOrigin(0.5);
+
         let creditsText = [
-            "",
             "PROGRAMMING: Lynn Gen (using Phaser.js)\n",
             "ART: Lynn Gen (using Aseprite)\n",
             "SFX: Lynn Gen (using Audacity and jfxr)\n",
             "MUSIC: Lynn Gen (using BeepBox)\n",
-            "",
-            "(Press [↓] to hide)",
-            "",
+            "FONT: Commodore 64 Pixelized\n",
+            "(Press [C] to hide)",
         ];
-        this.credits = this.add.text(w / 2, h / 2, creditsText, creditsConfig).setOrigin(0.5);
+        this.creditsBg = this.add.rectangle(w/ 2, h / 2, w, h * 2 / 3, commodorePurple);
+        this.credits = this.add.bitmapText(w / 2, h / 2, "c64-font", creditsText, 14).setOrigin(0.5);
         this.credits.visible = false;
+        this.creditsBg.visible = false;
 
         this.bgm = this.sound.add("bgm").setLoop(true).setVolume(bgmVol);
-        this.bgm.play();
-        this.bgm.setSeek(bgmTimestamp);
+        if (bgmTimestamp != 0) {
+            this.bgm.play();
+            this.bgm.setSeek(bgmTimestamp);
+        }
     }
 
     update() {
@@ -74,9 +40,10 @@ class Menu extends Phaser.Scene {
             this.scene.start("playScene");
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyC)) {
             this.sound.play("ui-sfx");
             this.credits.visible = !this.credits.visible;
+            this.creditsBg.visible = !this.creditsBg.visible;
         }
     }
 }

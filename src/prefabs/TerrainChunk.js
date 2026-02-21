@@ -2,9 +2,6 @@
 class TerrainChunk extends Phaser.GameObjects.GameObject {
     // get extra timePassed arg to determine difficulty, and player arg
     constructor(scene, player, timeElapsed) {
-        // console.log("made chunk at time " + timeElapsed);
-        // console.log("there are " + scene.cactiGroup.getLength() + " cacti")
-        // console.log("there are " + scene.chunkGroup.getLength() + " chunks")
         super(scene, "map-json");
 
         this.scene = scene;
@@ -34,15 +31,11 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         this.topFloor.setFlipY(true);
         this.topFloor.body.setImmovable();
         this.topFloor.body.setFrictionX(0);
-        // this.topFloor.setOrigin(1);
-        // scene.chunkGroup.add(this.bottomFloor);
 
         // special empty chunk for time 0
         if (timeElapsed == 0) {
             this.bottomFloor.y = MIN_FLOOR_H;
-            // this.bottomFloor.x -= 16;   // already there
             this.topFloor.y = MIN_CEIL_H;
-            // this.topFloor.x -= 16;
         // otherwise move things around and make cacti
         } else {
             this.bottomFloor.y = Phaser.Math.Between(MIN_FLOOR_H, MAX_FLOOR_H);
@@ -50,6 +43,7 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
             this.topFloor.y = Phaser.Math.Between(MIN_CEIL_H, MAX_CEIL_H);
             this.topFloor.x = w;
 
+            // ----- The Great Cacti Spawning Codeblock ----- //
             // pick random cacti out of 9 possible
             // createFromObjs makes an array of sprites
             this.cacti = map.createFromObjects("chunk", {
@@ -58,12 +52,15 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
             });
             // remove random cacti; number of removals inversely proportional to time passed
             Phaser.Math.RND.shuffle(this.cacti);
-            //TODO: make this equation better
-            let maxToRemove = Math.ceil(-Math.pow(this.scene.timeElapsed, 0.5) + 8);
-            for (let i = 0; i < Phaser.Math.Between(maxToRemove - 2, maxToRemove); i++) {
+            //TODO: make cacti equation better
+            // I invented all these equations by looking at them in desmos and seeing if
+            // I liked how they curved
+            let maxToRemove = Math.ceil(-Math.pow(this.scene.timeElapsed, 0.25) + 6);
+            for (let i = 0; i < Phaser.Math.Between(maxToRemove - 1, maxToRemove); i++) {
                 let c = this.cacti.pop();
                 c.destroy();
             }
+            // console.log('now ' + this.cacti.length + " cacti")
             // nathan's manual physics thing
             scene.physics.world.enable(this.cacti, Phaser.Physics.Arcade.DYNAMIC_BODY);
             // add to group sooner rather than later, because doing that MAY RESET PROPERTIES
@@ -82,48 +79,18 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
                 if (Phaser.Math.Between(0, 1) == 0) {
                     c.setOrigin(1);
                     c.setY(this.bottomFloor.y);
-                    c.setX(c.x + this.bottomFloor.x);
                 } else {
                     c.setOrigin(0);
                     c.setFlipY(true);
                     c.setY(this.topFloor.y + this.topFloor.height);
-                    c.setX(c.x + this.topFloor.x);
-                    // console.log("top cact at " + c.x + "," + c.y)
+                    // c.setX(c.x + this.topFloor.x);
                 }
+                c.setX(c.x + this.bottomFloor.x);
             });
         }
 
-        // supergroups
-        // objs, config
-        // this.bottomHalf = scene.physics.add.group(
-        //     [ this.bottomFloor ],
-        //     { runChildUpdate: true });
-
-        
-
-        // console.log(this.cacti);
-        // // this.cactiGroup = scene.add.group();//[], {runChildUpdate: true});
-        // for (let i = 1; i <= numBottomCacti; i++) {
-        //     let cactNum = Phaser.Math.Between(1, 9);
-        //     // console.log("cn " + cactNum);
-        //     let cObj = map.findObject("chunk", obj =>
-        //         obj.name === "cact_" + cactNum + "_small");
-        //     // console.log("found " + cObj.name);
-        //     let c = scene.physics.add.sprite(cObj.x, cObj.y, "small-cact-sprite");
-        //     c.body.setImmovable();
-        //     // this.cactiGroup.add(c);
-        // }
-        // console.log(this.cactiGroup);
-        
-    
-        // scene.cactiGroup.setY(this.bottomFloor.y);
-        // scene.cactiGroup.setX(this.bottomFloor.x);
-
         scene.physics.add.collider(player, this.bottomFloor);
         scene.physics.add.collider(player, this.topFloor);
-        // scene.physics.add.collider(player, this.cactiGroup, (player, cact) => {
-        //     scene.playerDie();
-        // });
         this.batoned = false;
     }
 
@@ -132,7 +99,9 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
         // take root so that speedup falls off over time
         // add const since the first call will have timeElapsed be 0
         if (!this.scene.gameOver) {
-            let v = -Math.pow(this.scene.timeElapsed + 1500, 0.75)
+            //TODO: make speedup better
+            // ----- The Great Game Speedup Equation ----- //
+            let v = -Math.pow(this.scene.timeElapsed + 380, 0.9)
             this.bottomFloor.setVelocityX(v);
             this.topFloor.setVelocityX(v);
             this.scene.cactiGroup.setVelocityX(v);

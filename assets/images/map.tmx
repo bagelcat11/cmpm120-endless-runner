@@ -374,7 +374,7 @@
    </properties>
   </tile>
  </tileset>
- <objectgroup id="3" name="chunk" visible="0">
+ <objectgroup id="3" name="chunk">
   <object id="7" name="floor" x="16" y="160">
    <point/>
   </object>
@@ -432,31 +432,25 @@
   <object id="27" name="cact_9_small" x="432" y="128">
    <point/>
   </object>
-  <object id="106" name="cact_big" x="54" y="118">
+  <object id="107" name="cact_big" x="80" y="112">
    <point/>
   </object>
-  <object id="107" name="cact_big" x="86" y="118">
+  <object id="108" name="cact_big" x="112" y="112">
    <point/>
   </object>
-  <object id="108" name="cact_big" x="118" y="118">
+  <object id="109" name="cact_big" x="208" y="112">
    <point/>
   </object>
-  <object id="109" name="cact_big" x="214" y="118">
+  <object id="110" name="cact_big" x="240" y="112">
    <point/>
   </object>
-  <object id="110" name="cact_big" x="246" y="118">
+  <object id="111" name="cact_big" x="272" y="112">
    <point/>
   </object>
-  <object id="111" name="cact_big" x="278" y="118">
+  <object id="112" name="cact_big" x="368" y="112">
    <point/>
   </object>
-  <object id="112" name="cact_big" x="374" y="118">
-   <point/>
-  </object>
-  <object id="113" name="cact_big" x="406" y="118">
-   <point/>
-  </object>
-  <object id="114" name="cact_big" x="438" y="118">
+  <object id="113" name="cact_big" x="400" y="112">
    <point/>
   </object>
  </objectgroup>
@@ -526,7 +520,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="2" name="bottom_mockup" width="32" height="18">
+ <layer id="2" name="bottom_mockup" width="32" height="18" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -237,18 +237,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":106,
-                 "name":"cact_big",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":54,
-                 "y":118
-                }, 
-                {
-                 "height":0,
                  "id":107,
                  "name":"cact_big",
                  "point":true,
@@ -256,8 +244,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":86,
-                 "y":118
+                 "x":80,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -268,8 +256,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":118,
-                 "y":118
+                 "x":112,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -280,8 +268,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":214,
-                 "y":118
+                 "x":208,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -292,8 +280,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":246,
-                 "y":118
+                 "x":240,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -304,8 +292,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":278,
-                 "y":118
+                 "x":272,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -316,8 +304,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":374,
-                 "y":118
+                 "x":368,
+                 "y":112
                 }, 
                 {
                  "height":0,
@@ -328,24 +316,12 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":406,
-                 "y":118
-                }, 
-                {
-                 "height":0,
-                 "id":114,
-                 "name":"cact_big",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":438,
-                 "y":118
+                 "x":400,
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -460,7 +436,7 @@
          "name":"bottom_mockup",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":32,
          "x":0,
          "y":0

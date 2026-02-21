@@ -4,6 +4,9 @@ class Load extends Phaser.Scene {
     }
 
     preload() {
+        //TODO: put up loading graphic
+        this.add.text(w / 2, h / 2, "Loading . . .");
+
         // put all assets in cache
         this.load.path = "./assets/";
 
@@ -25,6 +28,7 @@ class Load extends Phaser.Scene {
         this.load.image("far-bg", "images/bg-far.png");
         this.load.image("buildings-bg", "images/bg-buildings.png");
         this.load.image("ships-bg", "images/bg-ships.png");
+        this.load.image("menu-bg", "images/menu-bg.png");
 
         this.load.image("particle-sprite", "images/particle.png");
 
@@ -34,12 +38,12 @@ class Load extends Phaser.Scene {
         this.load.audio("ui-sfx", "sounds/ui.wav");
         this.load.audio("walk-sfx", "sounds/walk.wav");
         this.load.audio("bgm", "sounds/zworp-theme.wav");
+
+        this.load.bitmapFont("c64-font", "fonts/Commodore_64_Pixelized.png",
+                                            "fonts/Commodore_64_Pixelized.xml");
     }
 
     create() {
-        //TODO: put up loading graphic
-        this.add.text(w / 2, h / 2, "Loading . . .");
-
         // create anims
         if (!this.anims.exists("run")) {
             this.anims.create({

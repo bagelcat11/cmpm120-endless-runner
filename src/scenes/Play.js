@@ -21,23 +21,9 @@ class Play extends Phaser.Scene {
         // this.player.body.setSize(0.5);
         this.gameOver = false;
 
-        // set up inversion shader
-        // https://rexrainbow.github.io/phaser3-rex-notes/docs/site/postfx-pipeline/
-        // this.pipelineManager = this.sys.renderer.pipelines;
-        // this.pipelineManager.addPostPipeline("InvertFX", new InvertFX(this));
-        // this.cameras.main.postFX.addColorMatrix();
-
-        // create tilemap
-        // const map = this.add.tilemap("map-json");
-        // // add image to map (name FROM TILED IN JSON, key)
-        // const tileset = map.addTilesetImage("space-station-tiles", "tileset-image");
-        // const terrainLayer = map.createLayer("terrain", tileset);
-        // terrainLayer.setCollisionByProperty({collides: true});
-        // this.physics.add.collider(this.player, terrainLayer);
-
         // timer
         this.timeElapsed = 0;
-        this.timerText = this.add.text(0, h - 64);
+        this.timerText = this.add.bitmapText(w - 64, h / 2, "c64-font", "", 14).setOrigin(0.5);
 
         // set up initial chunk and group for chunks
         this.chunkGroup = this.add.group({
@@ -66,9 +52,6 @@ class Play extends Phaser.Scene {
         this.bgm.play();
         this.bgm.setSeek(bgmTimestamp);
 
-        // debug stuff
-        this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.debugText = this.add.text(0, h - 64).setDepth(101);
     }
 
     update(time, delta) {
@@ -77,10 +60,6 @@ class Play extends Phaser.Scene {
             this.player.update();
             this.timeElapsed += delta / 1000;
             this.timerText.text = this.timeElapsed.toFixed(1); // seconds to 1 decimal
-            // this.debugText.setText([
-            //     "Pos: " + this.player.body.x + ", " + this.player.body.y,
-            //     "Vel: " + this.player.body.velocity.x + ", " + this.player.body.velocity.y
-            // ]);
 
             this.physics.world.collide(this.player, this.cactiGroup, this.playerDie, null, this);
 
@@ -89,9 +68,6 @@ class Play extends Phaser.Scene {
                 // destroy earlier cacti and remove them from scene
                 this.cactiGroup.remove(this.cactiGroup.getFirstAlive(), true, true);
             }
-            // if (this.chunkGroup.getLength() > 5) {
-            //     this.chunkGroup.remove(this.chunkGroup.getFirstAlive(), true, true);
-            // }
 
             // parallax scroll
             // this.bgFar.tilePositionX += 0.1;
@@ -99,7 +75,7 @@ class Play extends Phaser.Scene {
             this.bgBuildings.tilePositionX += 0.3;
 
         } else {
-            if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
                 this.sound.play("ui-sfx");
                 bgmTimestamp = this.bgm.seek;
                 this.bgm.destroy();
@@ -118,13 +94,12 @@ class Play extends Phaser.Scene {
         this.player.on("animationcomplete", () => {
                     this.player.destroy()
         })
-        
+
+        // play cactus death sfx if not offscreen
         if (this.player.x > 0 && this.player.y > 0 && this.player.y < h) {
             this.sound.play("hit-sfx");
         };
         this.gameOver = true;
-        let score = this.timeElapsed;
-        // console.log("final score: " + score.toFixed(1));
         let particles = this.add.particles(
             this.player.x + this.player.width / 2,
             this.player.y + this.player.height / 2,
@@ -133,30 +108,16 @@ class Play extends Phaser.Scene {
         );
         particles.start();
 
-        let gameOverConfig = {
-            fontFamily: "Courier",
-            fontSize: "12px",
-            backgroundColor: "#116622",
-            color: "#FFFFFF",
-            align: "center",
-            padding: {
-                top: 5,
-                bottom: 5
-            },
-            fixedWidth: w
-        };
         let gameOverText = [
-            "",
-            "GAME OVER",
-            "",
-            "You survived for " + score.toFixed(1) + " sec.",
-            "Press [↓] to return to menu",
-            ""
+            "Zworp enjoyed " + this.timeElapsed.toFixed(1) + " sec. of freedom.\n",
+            "Press [SPACE] to return to menu",
         ];
 
         particles.on("complete", () => {
             particles.destroy;
-            this.overText = this.add.text(w / 2, h / 2, gameOverText, gameOverConfig).setOrigin(0.5);
+            this.overTextBg = this.add.rectangle(w / 2, h / 2, w, h / 3, commodoreGreen);
+            this.ot2 = this.add.bitmapText(w * 0.36, h * 0.36, "c64-font", "GAME OVER\n", 22).setOrigin(0);
+            this.overText = this.add.bitmapText(w / 2, h * 0.55, "c64-font", gameOverText, 14).setOrigin(0.5);
         });
     }
 }

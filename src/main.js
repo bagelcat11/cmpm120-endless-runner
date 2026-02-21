@@ -20,7 +20,9 @@ const config = {
     // pipeline: { InvertFX }
 }
 
-const game = new Phaser.Game(config)
+const game = new Phaser.Game(config);
 
 // globals
 let w = game.config.width, h = game.config.height;
+let bgmTimestamp = 0;
+let bgmVol = 0.4;

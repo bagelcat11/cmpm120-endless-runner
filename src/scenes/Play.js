@@ -9,6 +9,11 @@ class Play extends Phaser.Scene {
         
         this.keys = this.input.keyboard.createCursorKeys();
 
+        // parallax!!!
+        this.bgFar = this.add.tileSprite(0, 0, w, h, "far-bg").setOrigin(0);
+        this.bgShips = this.add.tileSprite(0, 0, w, h, "ships-bg").setOrigin(0);
+        this.bgBuildings = this.add.tileSprite(0, 0, w, h, "buildings-bg").setOrigin(0);
+
         // when we add the player, it will add its FSM to this scene
         this.player = new Player(this, w / 4, h * 0.9, "alien");
         // this.player.setScale(0.5);
@@ -57,6 +62,10 @@ class Play extends Phaser.Scene {
             duration: 100,
         };
 
+        this.bgm = this.sound.add("bgm").setLoop(true).setVolume(bgmVol);
+        this.bgm.play();
+        this.bgm.setSeek(bgmTimestamp);
+
         // debug stuff
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.debugText = this.add.text(0, h - 64).setDepth(101);
@@ -84,8 +93,16 @@ class Play extends Phaser.Scene {
             //     this.chunkGroup.remove(this.chunkGroup.getFirstAlive(), true, true);
             // }
 
+            // parallax scroll
+            // this.bgFar.tilePositionX += 0.1;
+            this.bgShips.tilePositionX -= 0.3;
+            this.bgBuildings.tilePositionX += 0.3;
+
         } else {
             if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+                this.sound.play("ui-sfx");
+                bgmTimestamp = this.bgm.seek;
+                this.bgm.destroy();
                 this.scene.start("menuScene");
             }
         }
@@ -97,7 +114,14 @@ class Play extends Phaser.Scene {
     }
 
     playerDie() {
-        this.player.destroy();
+        this.player.anims.play("die");
+        this.player.on("animationcomplete", () => {
+                    this.player.destroy()
+        })
+        
+        if (this.player.x > 0 && this.player.y > 0 && this.player.y < h) {
+            this.sound.play("hit-sfx");
+        };
         this.gameOver = true;
         let score = this.timeElapsed;
         // console.log("final score: " + score.toFixed(1));

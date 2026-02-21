@@ -3,6 +3,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture);
         scene.add.existing(this);   // add Player to scene
         scene.physics.add.existing(this);   // add Player body to scene
+        scene.sound.play("jump-sfx");
 
         this.scene = scene;
         this.body.setCollideWorldBounds(false);
@@ -11,7 +12,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(99);
 
         // make new properties
-        this.gravScale = 2000;
+        this.gravScale = 3000;
+
+        // this.walkSound = this.scene.sound.add("walk-sfx")//.setVolume(0.1);
+        // this.walkSound.play();
 
         // create FSM (initial state, state list, state args)
         scene.playerGravFSM = new StateMachine("up", {
@@ -21,11 +25,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        if (this.x < -this.width / 2 ||
+        if (this.x < -this.width ||
                 this.y > h + this.height / 2 ||
                 this.y < -this.height / 2) {
+            this.scene.sound.play("fall-sfx");
             this.scene.playerDie();
-            console.log("ouw")
         }
     }
 }
@@ -40,10 +44,20 @@ class DownState extends State {
     execute(scene, player) {
         const {left, right, up, down, space, shift } = scene.keys;
 
-        if (Phaser.Input.Keyboard.JustDown(space) &&
-                player.body.blocked.down) {
-            this.stateMachine.transition("up");
-            return;
+        if (player.body.blocked.down) {
+            // player.walkSound.once("complete", () => {
+            //     player.walkSound.play();
+            // });
+            // if (!player.walkSound.isPlaying) {
+            //     scene.time.delayedCall(1000, () => {
+            //         player.walkSound.play();
+            //     }, null, this);
+            // }
+            if (Phaser.Input.Keyboard.JustDown(space)) {
+                player.scene.sound.play("jump-sfx");
+                this.stateMachine.transition("up");
+                return;
+            }
         }
     }
 }
@@ -59,6 +73,7 @@ class UpState extends State {
 
         if (Phaser.Input.Keyboard.JustDown(space) &&
                 player.body.blocked.up) {
+            player.scene.sound.play("jump-sfx");
             this.stateMachine.transition("down");
             return;
         }

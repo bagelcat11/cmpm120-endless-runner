@@ -73,10 +73,10 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
                 c.body.setImmovable(true);
                 // randomly split between big and small
                 if (Phaser.Math.Between(0, 1) == 0) {
-                    c.body.setSize(c.width * 0.7, c.height * 0.7);
+                    c.body.setSize(c.width * 0.6, c.height * 0.7);
                 } else {
                     c.setTexture("small-cact-sprite");
-                    c.body.setSize(c.width * 0.7, c.height * 0.6);
+                    c.body.setSize(c.width * 0.7, c.height * 0.5);
                 }
                 // randomly split between floor and ceil
                 if (Phaser.Math.Between(0, 1) == 0) {
@@ -135,25 +135,18 @@ class TerrainChunk extends Phaser.GameObjects.GameObject {
             let v = -Math.pow(this.scene.timeElapsed + 1500, 0.75)
             this.bottomFloor.setVelocityX(v);
             this.topFloor.setVelocityX(v);
-            // this.scene.chunkGroup.setVelocityX(v);
             this.scene.cactiGroup.setVelocityX(v);
         } else {
             this.bottomFloor.setVelocityX(0);
             this.topFloor.setVelocityX(0);
-            // this.scene.chunkGroup.setVelocityX(0);
             this.scene.cactiGroup.setVelocityX(0);
         }
 
         if (this.bottomFloor.x < -this.mapW) {
-            // console.log("DEAD!");
-            // destroyChildren
-            //TODO: do i need to destroy the things i added to the scene???
-            // this.cactiGroup.destroy(true);
-            // this.bottomFloor.destroy();
+            //TODO: figure out how to destroy floors i added to scene...
             this.destroy();
         }
 
-        //TODO: increase distance for batoned over time?
         if (this.bottomFloor.x < 0 && !this.batoned) { //&& this.timeElapsed > 0.5) {//-w / 4) {
             // call adder from parent scene
             this.scene.addChunk(this.scene, this.player, this.timeElapsed);

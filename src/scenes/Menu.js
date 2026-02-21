@@ -41,32 +41,41 @@ class Menu extends Phaser.Scene {
             fontSize: "12px",
             backgroundColor: "#116622",
             color: "#FFFFFF",
-            align: "center",
+            align: "left",
             padding: {
                 top: 5,
-                bottom: 5
+                bottom: 5,
+                left: w / 4
             },
             fixedWidth: w
         };
         let creditsText = [
             "",
-            "Programming: Lynn Gen\n",
-            "Art: Lynn Gen\n",
-            "Palette: Commodore 64",
+            "PROGRAMMING: Lynn Gen (using Phaser.js)\n",
+            "ART: Lynn Gen (using Aseprite)\n",
+            "SFX: Lynn Gen (using Audacity and jfxr)\n",
+            "MUSIC: Lynn Gen (using BeepBox)\n",
             "",
             "(Press [↓] to hide)",
             "",
         ];
         this.credits = this.add.text(w / 2, h / 2, creditsText, creditsConfig).setOrigin(0.5);
         this.credits.visible = false;
+
+        this.bgm = this.sound.add("bgm").setLoop(true).setVolume(bgmVol);
+        this.bgm.play();
+        this.bgm.setSeek(bgmTimestamp);
     }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
+            bgmTimestamp = this.bgm.seek;
+            this.bgm.destroy();
             this.scene.start("playScene");
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+            this.sound.play("ui-sfx");
             this.credits.visible = !this.credits.visible;
         }
     }
